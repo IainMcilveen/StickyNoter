@@ -1,0 +1,62 @@
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# --- Logs ---
+logs
+*.log
+*.log.*
+logs/**
+debug.log
+error.log
+
+# --- Environment variables ---
+.env
+.env.* 
+!.env.example
+
+# --- Build outputs ---
+dist/
+build/
+public/build/
+frontend/dist/
+backend/dist/
+
+# --- Cache ---
+.cache/
+.cache-loader/
+.vite/
+.tmp/
+temp/
+tmp/
+
+# --- Editor & OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# --- Coverage ---
+coverage/
+*.lcov
+
+# --- MongoDB ---
+dump/
+*.bson
+*.json
+*.lock
+
+# --- Misc ---
+*.pid
+*.seed
+*.pid.lock
