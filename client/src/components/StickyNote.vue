@@ -31,27 +31,37 @@
   function startDrag(e) {
     offsetX = e.clientX - note.x;
     offsetY = e.clientY - note.y;
+    note.z = Date.now();
     document.addEventListener('mousemove', onDrag);
     document.addEventListener('mouseup', stopDrag);
   }
   function onDrag(e) {
     note.x = e.clientX - offsetX;
     note.y = e.clientY - offsetY;
-    emitUpdate();
+    
   }
   function stopDrag() {
     document.removeEventListener('mousemove', onDrag);
     document.removeEventListener('mouseup', stopDrag);
+    emitUpdate();
   }
 </script>
 
 <style>
   .note {
     position: absolute;
-    padding: 10px;
-    width: 260px;
-    background: #fff59d;
-    border: 1px solid #ccc;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    background: #fff475;
+    padding: 1rem;
+    width: 250px;
+    min-height: 150px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e0e0a0;
+    border-radius: 4px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    transform: rotate(-1deg);
+    cursor: grab;
+  }
+  .note:active {
+    cursor: grabbing;
   }
 </style>
