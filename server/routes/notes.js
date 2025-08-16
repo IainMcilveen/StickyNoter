@@ -13,12 +13,31 @@ router.post('/', async (req, res) => {
   res.status(201).json(note);
 });
 
-router.post('/clearHovers', async (_, res) => {
+router.post('/newEdit/:id?', async (req, res) => {
+  let id = "";
+  if(req.params.id && req.params.id !== "") {
+    id = req.params.id;
+  }
+
+
+  console.log(id)
+
   await Note.updateMany(
     {},
-    {"$set":{"hovering": false}},
+    { "$set": {
+      "editing": false
+    }},
   )
 
+  if (id !== undefined && id !== "") {
+    await Note.updateOne(
+      {_id:id},
+      { "$set": {
+        "editing": true
+      }},
+    )
+  }
+  
   const notes = await Note.find().sort({ updatedAt: -1 });
   res.json(notes);
 })

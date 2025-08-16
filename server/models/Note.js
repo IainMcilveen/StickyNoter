@@ -9,7 +9,7 @@ const NoteSchema = new mongoose.Schema({
   color: { type: String, default: '#FFF59D' },
   width: { type: Number, default: 260 },
   height: { type: Number, default: 220 },
-  hovering: { type: Boolean, default: false }
+  editing: { type: Boolean, default: false }
 }, { timestamps: true });
 
 export default mongoose.model('Note', NoteSchema);

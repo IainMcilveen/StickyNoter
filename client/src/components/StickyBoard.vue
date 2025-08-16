@@ -1,5 +1,5 @@
 <template>
-  <div class="board" @click="(_) => { clearAllHovers() }">
+  <div class="board" @click="(_) => { handleNewEdit() }">
     {{ notes }}
     <button @click="addNote">+ Add Note</button>
     <StickyNote
@@ -8,14 +8,14 @@
       :note="note"
       @update="saveNote"
       @delete="removeNote"
-      @clearHovers="clearAllHovers"
+      @newEdit="handleNewEdit"
     />
   </div>
 </template>
 
 <script setup>
   import { ref, onMounted } from 'vue';
-  import { getNotes, createNote, updateNote, deleteNote, clearHovers } from '../api.js';
+  import { getNotes, createNote, updateNote, deleteNote, newEdit } from '../api.js';
   import StickyNote from './StickyNote.vue';
 
   const notes = ref([]);
@@ -38,12 +38,8 @@
     notes.value = notes.value.filter(n => n._id !== id);
   }
 
-  const clearAllHovers = async (id) => {
-    notes.value = await clearHovers();
-    if (id != undefined) {
-      console.log("fuck you")
-      notes.value.find(x => x._id === id).hovering = true;
-    }
+  const handleNewEdit = async (id) => {
+    notes.value = await newEdit(id);
   }
 </script>
 
