@@ -4,47 +4,54 @@
     :style="{ left: note.x + 'px', top: note.y + 'px', background: note.color }"
     @mousedown="startDrag"
   >
-    <input v-model="note.title" @change="emitUpdate" />
-    <ul>
-      <li v-for="(item, index) in note.items" :key="index">
-        <input v-model="item.text" @change="emitUpdate" />
-        <button @click="removeItem(index)">x</button>
-      </li>
-    </ul>
-    <button @click="addItem">+ Item</button>
-    <button @click="$emit('delete', note._id)">Delete</button>
+    {{ note }}
+    <div v-if="note.hovering">
+      <input v-model="note.title" @change="emitUpdate" />
+      <QuillEditor
+        v-model:content="note.content"
+        content-type="html"
+        theme="snow"
+        @blur="emitUpdate"
+      />
+    </div>
+    <div v-else>
+      <div v-html="note.content" class="border p-3 rounded bg-gray-50"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
-  import { reactive, toRefs } from 'vue';
+  import { reactive, ref } from 'vue';
+  import { QuillEditor } from '@vueup/vue-quill'
+  import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
   const props = defineProps({ note: Object });
-  const emit = defineEmits(['update', 'delete']);
+  const emit = defineEmits(['update', 'delete', 'clearHovers']);
   const note = reactive(props.note);
 
-  function emitUpdate() { emit('update', note); }
-  function addItem() { note.items.push({ text: '' }); emitUpdate(); }
-  function removeItem(i) { note.items.splice(i, 1); emitUpdate(); }
+  const emitUpdate = () => { emit('update', note); }
+  const emitClearHovers = (id) => { emit('clearHovers', id) }
 
   let offsetX, offsetY;
-  function startDrag(e) {
+  const startDrag = (e) => {
+    emitClearHovers(note._id)
+
     offsetX = e.clientX - note.x;
     offsetY = e.clientY - note.y;
     note.z = Date.now();
     document.addEventListener('mousemove', onDrag);
     document.addEventListener('mouseup', stopDrag);
   }
-  function onDrag(e) {
+  const onDrag = (e) => {
     note.x = e.clientX - offsetX;
     note.y = e.clientY - offsetY;
-    
   }
-  function stopDrag() {
+  const stopDrag = () => {
     document.removeEventListener('mousemove', onDrag);
     document.removeEventListener('mouseup', stopDrag);
     emitUpdate();
   }
+
 </script>
 
 <style>
@@ -52,7 +59,7 @@
     position: absolute;
     background: #fff475;
     padding: 1rem;
-    width: 250px;
+    width: 350px;
     min-height: 150px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     border: 1px solid #e0e0a0;

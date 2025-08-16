@@ -13,6 +13,16 @@ router.post('/', async (req, res) => {
   res.status(201).json(note);
 });
 
+router.post('/clearHovers', async (_, res) => {
+  await Note.updateMany(
+    {},
+    {"$set":{"hovering": false}},
+  )
+
+  const notes = await Note.find().sort({ updatedAt: -1 });
+  res.json(notes);
+})
+
 router.put('/:id', async (req, res) => {
   const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json(note);
