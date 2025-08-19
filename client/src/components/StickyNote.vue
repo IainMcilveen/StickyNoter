@@ -3,9 +3,9 @@
     class="note"
     :style="{ left: note.x + 'px', top: note.y + 'px', background: note.color }"
     @mousedown="startDrag"
+    @click.stop
   >
-    {{ note }}
-    <div v-if="note.editing">
+    <div v-if="note.editing" class="ql-editor">
       <input v-model="note.title" @change="emitUpdate" />
       <QuillEditor
         v-model:content="note.content"
@@ -15,13 +15,19 @@
       />
     </div>
     <div v-else>
-      <div v-html="note.content" class="border p-3 rounded bg-gray-50"></div>
+      <div class="title-row flex mb-1">
+        <div class="text-l font-bold">{{ note.title }}</div>
+        <div class="ml-auto" @mousedown.stop @click.stop="emitDelete(note._id)">
+          <font-awesome-icon icon="fa-solid fa-trash" />
+        </div>
+      </div>
+      <div v-html="note.content" class="list-disc"></div>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { reactive, watch } from 'vue';
+  import { reactive } from 'vue';
   import { QuillEditor } from '@vueup/vue-quill'
   import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
@@ -30,6 +36,7 @@
   const note = reactive(props.note);
 
   const emitUpdate = () => { emit('update', note); }
+  const emitDelete = (id) => { emit('delete', id) }
   const emitNewEdit = (id) => { emit('newEdit', id) }
 
   let offsetX, offsetY;
@@ -71,5 +78,20 @@
   }
   .note:active {
     cursor: grabbing;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 1.5rem; 
+  }
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
   }
 </style>

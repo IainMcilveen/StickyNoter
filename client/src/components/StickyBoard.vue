@@ -1,10 +1,9 @@
 <template>
   <div class="board" @click="(_) => { handleNewEdit() }">
-    {{ notes }}
-    <button @click="addNote">+ Add Note</button>
+    <button @click="addNote" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow m-3">+ Add Note</button>
     <StickyNote
       v-for="note in notes"
-      :key="note._id"
+      :key="note._id + (!note.editing ? redraw.toString() : '')"
       :note="note"
       @update="saveNote"
       @delete="removeNote"
@@ -19,6 +18,7 @@
   import StickyNote from './StickyNote.vue';
 
   const notes = ref([]);
+  const redraw = ref(0)
 
   onMounted(async () => {
     notes.value = await getNotes();
@@ -40,6 +40,7 @@
 
   const handleNewEdit = async (id) => {
     notes.value = await newEdit(id);
+    redraw.value += 1;
   }
 </script>
 
