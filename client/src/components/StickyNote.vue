@@ -4,14 +4,14 @@
     :style="{ left: note.x + 'px', top: note.y + 'px', background: note.color }"
     @mousedown="startDrag"
     @click.stop
+    @mouseleave="emitUpdate"
   >
     <div v-if="note.editing" class="ql-editor">
-      <input v-model="note.title" @change="emitUpdate" />
+      <input v-model="note.title" class="title-input mb-2" />
       <QuillEditor
         v-model:content="note.content"
         content-type="html"
         theme="snow"
-        @blur="emitUpdate"
       />
     </div>
     <div v-else>
@@ -78,6 +78,13 @@
   }
   .note:active {
     cursor: grabbing;
+  }
+
+  .title-input {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
   }
 
   ul {
