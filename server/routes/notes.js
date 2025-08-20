@@ -19,9 +19,6 @@ router.post('/newEdit/:id?', async (req, res) => {
     id = req.params.id;
   }
 
-
-  console.log(id)
-
   await Note.updateMany(
     {},
     { "$set": {
