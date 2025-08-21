@@ -1,0 +1,40 @@
+services:
+  client:
+    build: ./client
+    container_name: vue-client
+    ports:
+      - "8080:80"   # Host:Container → browser hits localhost:8080
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  server:
+    build: ./server
+    container_name: express-server
+    ports:
+      - "5000:5000" # expose API for local dev/testing
+    environment:
+      - MONGO_URI=mongodb+srv://user:pass@testing.mkmgynm.mongodb.net/?retryWrites=true&w=majority&appName=testing/sticky
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:6
+    container_name: mongo-db
+    restart: always
+    ports:
+      - "27017:27017" # optional, only needed if you want to connect with Mongo Compass locally
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  mongo_data:
+

@@ -1,12 +1,16 @@
 import axios from 'axios';
 
-export const getNotes = () => axios.get('/api/notes').then(res => res.data);
-export const createNote = data => axios.post('/api/notes', data).then(res => res.data);
-export const updateNote = (id, data) => axios.put(`/api/notes/${id}`, data).then(res => res.data);
-export const deleteNote = id => axios.delete(`/api/notes/${id}`);
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "/api"
+});
+
+export const getNotes = () => api.get('/notes').then(res => res.data);
+export const createNote = data => api.post('/notes', data).then(res => res.data);
+export const updateNote = (id, data) => api.put(`/notes/${id}`, data).then(res => res.data);
+export const deleteNote = id => api.delete(`/notes/${id}`);
 export const newEdit = async id => {
   if(id !== undefined) {
-    return axios.post(`/api/notes/newEdit/${id}`,).then(res => res.data);
+    return api.post(`/notes/newEdit/${id}`,).then(res => res.data);
   } else
-  return axios.post(`/api/notes/newEdit`,).then(res => res.data);
+  return api.post(`/notes/newEdit`,).then(res => res.data);
 }
