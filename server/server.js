@@ -4,12 +4,14 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import morgan from 'morgan';
 import notesRouter from './routes/notes.js';
+import { clerkMiddleware } from '@clerk/express'
 
 const app = express();
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(clerkMiddleware())
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 

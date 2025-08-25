@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const NoteSchema = new mongoose.Schema({
+  userId: { type: String, default: '' },
   title: { type: String, default: 'Untitled' },
   content: { type: String, default: '' },
   x: { type: Number, default: 80 },
