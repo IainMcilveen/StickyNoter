@@ -25,6 +25,7 @@
   import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/vue'
   import StickyNote from './StickyNote.vue';
   import TopBar from './TopBar.vue';
+  
   const notes = ref([]);
   const redraw = ref(0)
 
