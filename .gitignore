@@ -6,7 +6,6 @@ yarn-error.log*
 pnpm-debug.log*
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 
 # --- Logs ---
 logs
@@ -53,8 +52,6 @@ coverage/
 # --- MongoDB ---
 dump/
 *.bson
-*.json
-*.lock
 
 # --- Misc ---
 *.pid

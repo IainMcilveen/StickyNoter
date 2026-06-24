@@ -1,0 +1,9 @@
+{
+  "name": "sticky-noter",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm --filter client build",
+    "install:all": "pnpm install -r"
+  }
+}

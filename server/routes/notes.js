@@ -22,32 +22,22 @@ router.post('/', requireAuth(), async (req, res) => {
   res.status(201).json(note);
 });
 
-router.post('/newEdit/:id?', requireAuth(), async (req, res) => {
-  let id = "";
-  if(req.params.id && req.params.id !== "") {
-    id = req.params.id;
+const handleNewEdit = async (req, res) => {
+  const id = req.params.id ?? '';
+
+  await Note.updateMany({}, { $set: { editing: false } });
+
+  if (id) {
+    await Note.updateOne({ _id: id }, { $set: { editing: true } });
   }
 
-  await Note.updateMany(
-    {},
-    { "$set": {
-      "editing": false
-    }},
-  )
-
-  if (id !== undefined && id !== "") {
-    await Note.updateOne(
-      {_id:id},
-      { "$set": {
-        "editing": true
-      }},
-    )
-  }
-  
-  const { userId } = getAuth(req)
-  const notes = await Note.find({ userId: userId }).sort({ updatedAt: -1 });
+  const { userId } = getAuth(req);
+  const notes = await Note.find({ userId }).sort({ updatedAt: -1 });
   res.json(notes);
-})
+};
+
+router.post('/newEdit', requireAuth(), handleNewEdit);
+router.post('/newEdit/:id', requireAuth(), handleNewEdit);
 
 router.put('/:id', requireAuth(), async (req, res) => {
   const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
